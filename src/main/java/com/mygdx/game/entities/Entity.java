@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.CoreGame;
+import com.mygdx.game.EntityController;
 import com.mygdx.game.Utils;
 
 public abstract class Entity extends GameObject {
@@ -32,7 +33,6 @@ public abstract class Entity extends GameObject {
 	protected int frame;
 	/** row of the animation in spritesheet */
 	protected Direction facing;
-	protected String name = "badlogic";
 	protected String path = Utils.BASE_ASSETS_PATH + name + ".png";
 	protected Texture spritesheet;
 	protected TextureRegion[][] animation;
@@ -61,32 +61,56 @@ public abstract class Entity extends GameObject {
 	
 	public void act() {
 		if (walking || running) {
+
+			int distanceX = 1;
+			int distanceY = 1;
+
+			if (running) {
+				distanceX *= 2;
+				distanceY *= 2;
+			}
+
+			switch (facing) {
+				case SOUTH:
+					distanceY *= -1;
+//					distanceX = 0;
+//					break;
+				case NORTH:
+					distanceX = 0;
+					break;
+				case WEST:
+					distanceX *= -1;
+//					distanceY = 0;
+//					break;
+				case EAST:
+					distanceY = 0;
+					break;
+				default:
+					distanceX = distanceY = 0;
+			}
+
+			EntityController.get().translateEntity(distanceX, distanceY, this);
+
 			// manage animations
 			move_time++;
 			if (move_time > WALK_2) {
 				stopWalk();
 				stopRun();
-			}
 
-			int distance = 7;
+				int offsetX = this.getX() % 3;
+				int offsetY = this.getY() % 3;
+				if (offsetX != 0) {
+//					if (distanceX < 0) {
+//
+//					}
+					EntityController.get().teleportEntity(x+offsetX, y, this);
+				}
+				if (offsetY != 0) {
+//					if (distanceY < 0) {
 
-			if (running) {
-				distance *= 2;
-			}
-
-			switch (facing) {
-				case NORTH:
-					currentSprite.translateY(distance * CoreGame.windowSize);
-					break;
-				case SOUTH:
-					currentSprite.translateY(-distance * CoreGame.windowSize);
-					break;
-				case EAST:
-					currentSprite.translateX(distance * CoreGame.windowSize);
-					break;
-				case WEST:
-					currentSprite.translateX(-distance*CoreGame.windowSize);
-					break;
+//					}
+					EntityController.get().teleportEntity(x, y+offsetY, this);
+				}
 			}
 		}
 
@@ -115,7 +139,7 @@ public abstract class Entity extends GameObject {
 				walk_cycle++;
 			}
 		} else if (sitting) {
-			
+			frame = IDLE;
 		} else {
 			frame = IDLE;
 		}
@@ -131,21 +155,29 @@ public abstract class Entity extends GameObject {
 	}
 	
 	public void walk() {
-		walking = true;
+		if (!walking) {
+			walking = true;
+		}
 	}
 
 	public void run() {
-		running = true;
+		if (!running) {
+			running = true;
+		}
 		walk();
 	}
 	
 	public void stopWalk() {
-		walking = false;
-		move_time = 0;
+		if (walking) {
+			walking = false;
+			move_time = 0;
+		}
 	}
 
 	public void stopRun() {
-		running = false;
+		if (running) {
+			running = false;
+		}
 	}
 	
 	public boolean isWalking() {

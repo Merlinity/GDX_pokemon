@@ -34,16 +34,22 @@ public class Controller extends Task {
     }
 
     private void handleMovement() {
-        Direction facing = getFacing();
+        Direction directionForMovement = getFacing();
 
-        if (facing == controlled_entity.getFacing()) {
+        if (directionForMovement == null) {
+            return;
+        }
+
+        if (directionForMovement == controlled_entity.getFacing()) {
+            Utils.debug("Making " + controlled_entity.getName() + " move.");
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
                 controlled_entity.run();
             } else {
                 controlled_entity.walk();
             }
         } else {
-            controlled_entity.setFacing(facing);
+            Utils.debug("Making " + controlled_entity.getName() + " face " + directionForMovement.name() + ".");
+            controlled_entity.setFacing(directionForMovement);
         }
     }
 

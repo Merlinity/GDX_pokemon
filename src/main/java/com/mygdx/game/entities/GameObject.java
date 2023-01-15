@@ -13,9 +13,18 @@ public abstract class GameObject {
     // whether objects on the same layer can pass through or not
     protected boolean solid;
 
+    protected String name = "badlogic";
 
     public Sprite getCurrentSprite() {
         return currentSprite;
+    }
+
+    public boolean isSolid() {
+        return solid;
+    }
+
+    public void setSolid(boolean solid) {
+        this.solid = solid;
     }
 
     public void setLocation(int x, int y) {
@@ -29,6 +38,10 @@ public abstract class GameObject {
 
     public int getY() {
         return y;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public abstract void draw(SpriteBatch batch);

@@ -4,6 +4,8 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.GameObject;
 
+import java.util.ConcurrentModificationException;
+
 public class EntityController extends Task {
 
 	private static EntityController entityController;
@@ -20,22 +22,45 @@ public class EntityController extends Task {
 	}
 
 	public void translateEntity(int x, int y, Entity entity) {
-		if (!isCorrectObjectPosition(entity)) {
+		if (entity == null || (x == 0 && y == 0)) {
 			return;
 		}
 
-		Tile targetTile = map[entity.getY()][entity.getX()];
-	}
-
-	private boolean isCorrectObjectPosition(GameObject object) {
-		if (object == null) {
-			return false;
-		}
-		return map[object.getY()][object.getX()].objects.contains(object);
+		teleportEntity(entity.getX() + x, entity.getY() + y, entity);
 	}
 
 	public void teleportEntity(int x, int y, Entity entity) {
+		Tile sourceTile = getTile(entity);
+		if (sourceTile == null || !sourceTile.objects.contains(entity)) {
+			return;
+		}
 
+		Tile targetTile = null;
+		try {
+			targetTile = map[y][x];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			return;
+		}
+
+		for (GameObject object : targetTile.objects) {
+			if (object.isSolid()) {
+				return;
+			}
+		}
+
+		CoreGame.get().addToMap(x, y, entity);
+		sourceTile.objects.remove(entity);
+	}
+
+	private Tile getTile(GameObject object) {
+		Tile tile = null;
+		try {
+			tile = map[object.getY()][object.getX()];
+		} catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
+			e.printStackTrace();
+		}
+		return tile;
 	}
 	
 	@Override
@@ -44,9 +69,17 @@ public class EntityController extends Task {
 		for (int y = 0; y < map.length; y++) {
 			for (int x = 0; x < map[y].length; x++) {
 				tile = map[y][x];
+				// TODO: ConcurrentModificationException when trying to move.
+				//  Which makes sense, considering the fact that I am actually taking the moving object out of the array
 				for (GameObject object : tile.objects) {
+					Utils.debug("Making " + object.getName() + " act at " + object.getX() + "/" + object.getY());
+
 					if (object instanceof Entity) {
-						((Entity) object).act();
+						try {
+							((Entity) object).act();
+						} catch (ConcurrentModificationException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}

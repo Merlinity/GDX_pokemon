@@ -9,15 +9,14 @@ import com.mygdx.game.Utils;
 
 public class Ethan extends Entity {
 
-    protected String name = "ethan";
-
     public Ethan() {
     }
 
     protected void init() {
+        name = "ethan";
         frame = 0;
         facing = Direction.SOUTH;
-        spritesheet = new Texture(Utils.BASE_ASSETS_PATH + "ethan" + ".png");
+        spritesheet = new Texture(Utils.BASE_ASSETS_PATH + name + ".png");
         animation = TextureRegion.split(spritesheet, 33, 32);
         currentSprite = new Sprite(animation[facing.ordinal()][frame]);
     }

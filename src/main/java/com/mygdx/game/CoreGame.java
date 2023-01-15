@@ -73,7 +73,7 @@ public class CoreGame extends ApplicationAdapter {
 		Timer.schedule(new EntityController(this, map), 0f, 0.099f);
 	}
 
-	private void addToMap(int x, int y, GameObject object) {
+	public void addToMap(int x, int y, GameObject object) {
 		object.setLocation(x, y);
 		map[y][x].objects.add(object);
 	}
@@ -93,6 +93,7 @@ public class CoreGame extends ApplicationAdapter {
 					if (object == null) {
 						continue;
 					}
+					Utils.debug("Rendering " + object.getName() + " at " + object.getX() + "/" + object.getY());
 					sprite = object.getCurrentSprite();
 					sprite.setX((x+1) * tileSize * windowSize);
 					sprite.setY((y+1) * tileSize * windowSize);
