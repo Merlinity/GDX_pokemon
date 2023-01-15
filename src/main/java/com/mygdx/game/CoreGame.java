@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -61,16 +60,14 @@ public class CoreGame extends ApplicationAdapter {
 		
 		currentTime = System.currentTimeMillis();
 		lastTime = currentTime;
-		Timer.schedule(new Controller(ethan), 0f, 0.1f);
-		Timer.schedule(new AnimationController(entities), 0f, 0.099f);
+		Timer.schedule(new Controller(ethan), 0f, 0.01f);
+		Timer.schedule(new EntityController(entities), 0f, 0.099f);
 	}
 
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-		
 		
 		batch.begin();
 		for (Entity entity : entities)

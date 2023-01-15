@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.entities.Entity;
 
-public class AnimationController extends Task {
+public class EntityController extends Task {
 	ArrayList<Entity> entities;
 	
-	public AnimationController(ArrayList<Entity> entities) {
+	public EntityController(ArrayList<Entity> entities) {
 		this.entities = entities;
 	}
 	

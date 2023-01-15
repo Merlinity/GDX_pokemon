@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.Utils;
+import com.mygdx.game.entities.Direction;
 import com.mygdx.game.entities.Entity;
 
 public class Pokemon extends Entity {
@@ -27,10 +28,10 @@ public class Pokemon extends Entity {
 	protected void init() {
 		ran = new Random();
 		frame = 0;
-		facing = SOUTH;
+		facing = Direction.SOUTH;
 		spritesheet = new Texture(Utils.BASE_ASSETS_PATH + "Pokemon/" + name + ".png");
 		animation = TextureRegion.split(spritesheet, 33, 32);
-		currentSprite = new Sprite(animation[SOUTH][frame]);
+		currentSprite = new Sprite(animation[facing.ordinal()][frame]);
 	}
 
 	@Override
