@@ -8,21 +8,22 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.Utils;
 
 public class Ethan extends Entity {
-	
-	protected String name = "ethan";
-	
-	public Ethan() {
-	}
-	
-	protected void init() {
-		spritesheet = new Texture(Utils.BASE_ASSETS_PATH + "ethan" + ".png");
-		
-		animation = TextureRegion.split(spritesheet, 19, 28);
-		currentSprite = new Sprite(animation[0][frame]);
-	}
-	
-	@Override
-	public void dispose() {
-		spritesheet.dispose();
-	}
+
+    protected String name = "ethan";
+
+    public Ethan() {
+    }
+
+    protected void init() {
+        frame = 0;
+        facing = Direction.SOUTH;
+        spritesheet = new Texture(Utils.BASE_ASSETS_PATH + "ethan" + ".png");
+        animation = TextureRegion.split(spritesheet, 33, 32);
+        currentSprite = new Sprite(animation[facing.ordinal()][frame]);
+    }
+
+    @Override
+    public void dispose() {
+        spritesheet.dispose();
+    }
 }

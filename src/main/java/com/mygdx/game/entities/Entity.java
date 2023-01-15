@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.CoreGame;
 import com.mygdx.game.Utils;
 
-public abstract class Entity {
+public abstract class Entity extends GameObject {
 	
 //	public static final int NORTH = 0;
 //	public static final int SOUTH = 1;
@@ -32,12 +32,10 @@ public abstract class Entity {
 	protected int frame;
 	/** row of the animation in spritesheet */
 	protected Direction facing;
-	protected int x, y;
 	protected String name = "badlogic";
 	protected String path = Utils.BASE_ASSETS_PATH + name + ".png";
 	protected Texture spritesheet;
 	protected TextureRegion[][] animation;
-	protected Sprite currentSprite;
 	
 	protected Entity() {
 		frame = 0;
@@ -53,15 +51,15 @@ public abstract class Entity {
 			spritesheet = new Texture(Utils.BASE_ASSETS_PATH + name + ".png");
 		}
 		if (animation == null) {
-			animation = TextureRegion.split(spritesheet, 33, 30);
+			animation = TextureRegion.split(spritesheet, 33, 32);
 		}
 		if (currentSprite == null) {
 			currentSprite = new Sprite(animation[Direction.SOUTH.ordinal()][frame]);
 		}
-		currentSprite.scale(CoreGame.size);
+		currentSprite.scale(CoreGame.windowSize);
 	}
 	
-	public void tick() {
+	public void act() {
 		if (walking || running) {
 			// manage animations
 			move_time++;
@@ -78,16 +76,16 @@ public abstract class Entity {
 
 			switch (facing) {
 				case NORTH:
-					currentSprite.translateY(distance * CoreGame.size);
+					currentSprite.translateY(distance * CoreGame.windowSize);
 					break;
 				case SOUTH:
-					currentSprite.translateY(-distance * CoreGame.size);
+					currentSprite.translateY(-distance * CoreGame.windowSize);
 					break;
 				case EAST:
-					currentSprite.translateX(distance * CoreGame.size);
+					currentSprite.translateX(distance * CoreGame.windowSize);
 					break;
 				case WEST:
-					currentSprite.translateX(-distance*CoreGame.size);
+					currentSprite.translateX(-distance*CoreGame.windowSize);
 					break;
 			}
 		}
@@ -131,10 +129,6 @@ public abstract class Entity {
 		}, 0f);
 		currentSprite.draw(batch);
 	}
-	
-	abstract protected void init();
-	
-	abstract public void dispose();
 	
 	public void walk() {
 		walking = true;
@@ -182,23 +176,4 @@ public abstract class Entity {
 		this.facing = facing;
 	}
 
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public Sprite getCurrentSprite() {
-		return currentSprite;
-	}
 }
