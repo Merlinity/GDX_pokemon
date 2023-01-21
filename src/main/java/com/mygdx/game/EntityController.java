@@ -69,6 +69,7 @@ public class EntityController extends Task {
 	
 	@Override
 	public void run() {
+		// TODO: fix player movement, make him not constantly teleport to the right
 		PlayerController.get().run();
 
 		List<Entity> copyOfEntities = new ArrayList<>(entities);

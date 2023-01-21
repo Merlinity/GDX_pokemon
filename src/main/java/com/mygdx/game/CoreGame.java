@@ -84,7 +84,7 @@ public class CoreGame extends ApplicationAdapter {
 		lastTime = currentTime;
 		PlayerController playerController = new PlayerController(ethan);
 //		Timer.schedule(new Controller(ethan), 0, 0.02f);
-		Timer.schedule(new EntityController(this, entityList), 0.01f, 0.02f);
+		Timer.schedule(new EntityController(this, entityList), 0f, 0.1f);
 	}
 
 	public void addToMap(int x, int y, GameObject object) {
