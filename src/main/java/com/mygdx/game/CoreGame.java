@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -60,17 +61,30 @@ public class CoreGame extends ApplicationAdapter {
 		int x = 42;
 		int y = 21;
 
+		// TODO: there are now multiple lists with the same entities.
+		//  This could lead to entities being left over in one of the arrays despite being removed from the other one.
+		//  It may be, that I want that to happen, but it can also lead to bugs.
+		List<Entity> entityList = new ArrayList<>();
+
+		entityList.add(ethan);
+		entityList.add(Pkmns.get("Dratini"));
+		entityList.add(Pkmns.get("Chillabell"));
+		entityList.add(Pkmns.get("Picochilla"));
+		entityList.add(Pkmns.get("Sandan"));
+		entityList.add(Pkmns.get("Sandamer"));
+
 		addToMap(0, 0, ethan);
-		addToMap(0, 2, Pkmns.get("Dratini"));
-		addToMap(1, 0, Pkmns.get("Chillabell"));
-		addToMap(1, 1, Pkmns.get("Picochilla"));
-		addToMap(2, 0, Pkmns.get("Nagelotz"));
-		addToMap(2, 2, Pkmns.get("Sandan"));
+		addToMap(0, 2, entityList.get(1));
+		addToMap(1, 0, entityList.get(2));
+		addToMap(1, 1, entityList.get(3));
+		addToMap(2, 0, entityList.get(4));
+		addToMap(2, 2, entityList.get(5));
 
 		currentTime = System.currentTimeMillis();
 		lastTime = currentTime;
-		Timer.schedule(new Controller(ethan), 0f, 0.01f);
-		Timer.schedule(new EntityController(this, map), 0f, 0.099f);
+		PlayerController playerController = new PlayerController(ethan);
+//		Timer.schedule(new Controller(ethan), 0, 0.02f);
+		Timer.schedule(new EntityController(this, entityList), 0.01f, 0.02f);
 	}
 
 	public void addToMap(int x, int y, GameObject object) {

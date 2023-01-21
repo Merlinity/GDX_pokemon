@@ -6,15 +6,20 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.entities.Direction;
 import com.mygdx.game.entities.Entity;
 
-import java.util.Objects;
+public class PlayerController extends Task {
+    private static PlayerController playerController;
 
-public class Controller extends Task {
-    Entity controlled_entity;
+    private Entity controlled_entity;
 
-    GameState currentState;
-    public Controller(Entity e) {
+    private GameState currentState;
+    public PlayerController(Entity e) {
+        playerController = this;
         controlled_entity = e;
         currentState = GameState.OVERWORLD;
+    }
+
+    public static PlayerController get() {
+        return PlayerController.playerController;
     }
 
     @Override
@@ -26,6 +31,12 @@ public class Controller extends Task {
             switch (action) {
                 case "movePlayer":
                     handleMovement();
+                    break;
+                case "moveCursor":
+                    Utils.debug("There are no menus to move cursor in.");
+                    break;
+                case "openMenu":
+                    Utils.debug("Menu not yet implemented.");
                     break;
             }
         } catch (NullPointerException e) {

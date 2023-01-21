@@ -4,17 +4,19 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.GameObject;
 
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 
 public class EntityController extends Task {
 
 	private static EntityController entityController;
 
-	Tile[][] map;
+	List<Entity> entities;
 
-	public EntityController(CoreGame game, Tile[][] map) {
+	public EntityController(CoreGame game, List<Entity> entities) {
 		EntityController.entityController = this;
-		this.map = map;
+		this.entities = entities;
 	}
 
 	public static EntityController get() {
@@ -35,9 +37,11 @@ public class EntityController extends Task {
 			return;
 		}
 
+		Utils.debug(String.format("Trying to move %s to %d/%d", entity.getName(), x, y));
+
 		Tile targetTile = null;
 		try {
-			targetTile = map[y][x];
+			targetTile = CoreGame.get().map[y][x];
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
 			return;
@@ -56,7 +60,7 @@ public class EntityController extends Task {
 	private Tile getTile(GameObject object) {
 		Tile tile = null;
 		try {
-			tile = map[object.getY()][object.getX()];
+			tile = CoreGame.get().map[object.getY()][object.getX()];
 		} catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
 			e.printStackTrace();
 		}
@@ -65,23 +69,16 @@ public class EntityController extends Task {
 	
 	@Override
 	public void run() {
-		Tile tile;
-		for (int y = 0; y < map.length; y++) {
-			for (int x = 0; x < map[y].length; x++) {
-				tile = map[y][x];
-				// TODO: ConcurrentModificationException when trying to move.
-				//  Which makes sense, considering the fact that I am actually taking the moving object out of the array
-				for (GameObject object : tile.objects) {
-					Utils.debug("Making " + object.getName() + " act at " + object.getX() + "/" + object.getY());
+		PlayerController.get().run();
 
-					if (object instanceof Entity) {
-						try {
-							((Entity) object).act();
-						} catch (ConcurrentModificationException e) {
-							e.printStackTrace();
-						}
-					}
-				}
+		List<Entity> copyOfEntities = new ArrayList<>(entities);
+		for (Entity entity : copyOfEntities) {
+			Utils.debug("Making " + entity.getName() + " act at " + entity.getX() + "/" + entity.getY());
+
+			try {
+				entity.act();
+			} catch (ConcurrentModificationException e) {
+				e.printStackTrace();
 			}
 		}
 	}
