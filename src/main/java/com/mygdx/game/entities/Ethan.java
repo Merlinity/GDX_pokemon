@@ -10,6 +10,7 @@ import com.mygdx.game.Utils;
 public class Ethan extends Entity {
 
     public Ethan() {
+        super(-1);
     }
 
     protected void init() {

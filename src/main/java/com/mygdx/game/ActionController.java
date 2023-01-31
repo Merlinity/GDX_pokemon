@@ -20,6 +20,9 @@ public class ActionController extends Timer.Task {
                 case MOVE -> {
                     processMovement(e);
                 }
+                case IDLE -> {
+                    e.idleAction();
+                }
             }
         }
     }

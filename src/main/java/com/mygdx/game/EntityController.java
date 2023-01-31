@@ -2,7 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.entities.Entity;
-import com.mygdx.game.entities.GameObject;
+import com.mygdx.game.entities.pokemon.Pokemon;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -29,11 +29,7 @@ public class EntityController extends Task {
 		List<Entity> copyOfEntities = new ArrayList<>(entities);
 		for (Entity entity : copyOfEntities) {
 //			Utils.debug("Making " + entity.getName() + " act at " + entity.getX() + "/" + entity.getY());
-			try {
-				entity.determineNextAction();
-			} catch (ConcurrentModificationException e) {
-				e.printStackTrace();
-			}
+			entity.prepareNextAction();
 		}
 	}
 

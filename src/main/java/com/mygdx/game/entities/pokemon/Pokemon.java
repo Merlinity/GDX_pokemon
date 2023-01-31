@@ -12,25 +12,23 @@ import com.mygdx.game.entities.Entity;
 public class Pokemon extends Entity {
 
     // Standard Größe der Sprites: 33 x 32
+    private static final int FRAME_SWITCH = 5;
+    protected Random ran;
 
-    public static final int BASIS = 0;
-    public static final int PHASE_1 = 1;
-    public static final int PHASE_2 = 2;
 
-    Random ran;
+    private int frameTime;
 
-    int evolution_stage;
-
-    Pokemon(int evolutionStage) {
-        super();
+    Pokemon(int id) {
+        super(id);
     }
 
     @Override
     protected void init() {
+        name = Pkmns.getName(id);
         ran = new Random();
         frame = 0;
         facing = Direction.SOUTH;
-        spritesheet = new Texture(Utils.BASE_ASSETS_PATH + "Pokemon/" + name + ".png");
+        spritesheet = new Texture(Utils.BASE_ASSETS_PATH + "Pokemon/" + id + ".png");
         animation = TextureRegion.split(spritesheet, 33, 32);
         currentSprite = new Sprite(animation[facing.ordinal()][frame]);
     }
@@ -40,4 +38,16 @@ public class Pokemon extends Entity {
         spritesheet.dispose();
     }
 
+    @Override
+    public void idleAction() {
+        this.frameTime++;
+        if (frameTime > FRAME_SWITCH) {
+            frameTime = 0;
+            if (frame == IDLE) {
+                frame = 1;
+            } else {
+                frame = IDLE;
+            }
+        }
+    }
 }

@@ -27,9 +27,9 @@ public class PlayerController extends Task {
         String action;
         try {
             action = determineAction();
-            if (controlled_entity.isWalking() && !"movePlayer".equals(action)) {
-                controlled_entity.stopWalk();
-            }
+//            if (controlled_entity.isWalking() && !"movePlayer".equals(action)) {
+//                controlled_entity.stopWalk();
+//            }
 
             switch (action) {
                 case "movePlayer":

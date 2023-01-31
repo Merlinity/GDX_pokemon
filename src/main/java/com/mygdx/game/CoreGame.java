@@ -63,11 +63,11 @@ public class CoreGame extends ApplicationAdapter {
 		entityList.add(Pkmns.get("Sandamer"));
 
 		/*0, 0,*/ ethan.setLocation(0, 0);
-		/*0, 2,*/ entityList.get(1).setLocation(0, 64);
-		/*1, 0,*/ entityList.get(2).setLocation(32, 0);
-		/*1, 1,*/ entityList.get(3).setLocation(32, 32);
-		/*2, 0,*/ entityList.get(4).setLocation(64, 0);
-		/*2, 2,*/ entityList.get(5).setLocation(64, 64);
+		/*0, 2,*/ entityList.get(1).setLocation(32, 64);
+		/*1, 0,*/ entityList.get(2).setLocation(32, 15);
+		/*1, 1,*/ entityList.get(3).setLocation(128, 32);
+		/*2, 0,*/ entityList.get(4).setLocation(256, 256);
+		/*2, 2,*/ entityList.get(5).setLocation(164, 135);
 
 		entities = entityList;
 

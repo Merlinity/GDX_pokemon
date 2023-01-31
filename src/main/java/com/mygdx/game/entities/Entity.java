@@ -15,7 +15,9 @@ public abstract class Entity extends GameObject {
 //	public static final int SOUTH = 1;
 //	public static final int WEST = 2;
 //	public static final int EAST = 3;
-	
+
+	protected int id;
+
 	public static final int IDLE = 0;
 	public static final int WALK_1 = 1;
 	public static final int WALK_2 = 2;
@@ -44,7 +46,8 @@ public abstract class Entity extends GameObject {
 
 	protected int velocityX, velocityY;
 	
-	protected Entity() {
+	protected Entity(int id) {
+		this.id = id;
 		frame = 0;
 		walk_cycle = 0;
 		move_time = 0;
@@ -69,13 +72,8 @@ public abstract class Entity extends GameObject {
 	/**
 	 * Process current state and determine what the next action should be.
 	 */
-	public void determineNextAction() {
-//		if (move_time > WALK_2) {
-//			stopWalk();
-//			stopRun();
-//		}
+	public void prepareNextAction() {
 		if (nextAction == ObjectAction.MOVE) {
-
 			int distanceX = 8;
 			int distanceY = 8;
 
@@ -112,14 +110,18 @@ public abstract class Entity extends GameObject {
 			move_time++;
 		}
 
-		// set the correct frame
-		if (walking) {
-			// do nothing
-		} else if (sitting) {
-			frame = IDLE;
-		} else {
-			frame = IDLE;
-		}
+//		// set the correct frame
+//		if (walking) {
+//			// do nothing
+//		} else if (sitting) {
+//			frame = IDLE;
+//		} else {
+//			frame = IDLE;
+//		}
+	}
+
+	public void idleAction() {
+		frame = IDLE;
 	}
 
 
@@ -134,6 +136,8 @@ public abstract class Entity extends GameObject {
 			frame = WALK_2;
 			walk_cycle++;
 		}
+
+		stopWalk();
 	}
 
 	public void draw(SpriteBatch batch) {
@@ -169,7 +173,7 @@ public abstract class Entity extends GameObject {
 			nextAction = ObjectAction.IDLE;
 			velocityX = 0;
 			velocityY = 0;
-			move_time = 0;
+//			move_time = 0;
 		}
 	}
 
