@@ -26,7 +26,7 @@ public class CoreGame extends ApplicationAdapter {
 	
 	SpriteBatch batch;
 	Ethan ethan;
-	ArrayList<Entity> entities;
+	List<Entity> entities;
 	
 	int frame;
 	int zeile;
@@ -34,11 +34,10 @@ public class CoreGame extends ApplicationAdapter {
 	
 	long currentTime, lastTime;
 
-	Tile[][] map;
-
 	public static CoreGame get() {
 		return CoreGame.game;
 	}
+
 	@Override
 	public void create () {
 		CoreGame.game = this;
@@ -46,24 +45,14 @@ public class CoreGame extends ApplicationAdapter {
 		height = 600; //Gdx.graphics.getHeight();
 		Gdx.graphics.setWindowedMode((int)(width*(windowSize /2)), (int)(height*(windowSize /2)));
 		batch = new SpriteBatch();
-		entities = new ArrayList<Entity>();
+		entities = new ArrayList<>();
 
-		map = new Tile[100][100];
-		for (Tile[] tileRow : map) {
-			for (int i = 0; i < tileRow.length; i++) {
-				tileRow[i] = new Tile();
-			}
-		}
-		
 		ethan = new Ethan();
 
 		Pokemon poke;
 		int x = 42;
 		int y = 21;
 
-		// TODO: there are now multiple lists with the same entities.
-		//  This could lead to entities being left over in one of the arrays despite being removed from the other one.
-		//  It may be, that I want that to happen, but it can also lead to bugs.
 		List<Entity> entityList = new ArrayList<>();
 
 		entityList.add(ethan);
@@ -73,47 +62,39 @@ public class CoreGame extends ApplicationAdapter {
 		entityList.add(Pkmns.get("Sandan"));
 		entityList.add(Pkmns.get("Sandamer"));
 
-		addToMap(0, 0, ethan);
-		addToMap(0, 2, entityList.get(1));
-		addToMap(1, 0, entityList.get(2));
-		addToMap(1, 1, entityList.get(3));
-		addToMap(2, 0, entityList.get(4));
-		addToMap(2, 2, entityList.get(5));
+		/*0, 0,*/ ethan.setLocation(0, 0);
+		/*0, 2,*/ entityList.get(1).setLocation(0, 64);
+		/*1, 0,*/ entityList.get(2).setLocation(32, 0);
+		/*1, 1,*/ entityList.get(3).setLocation(32, 32);
+		/*2, 0,*/ entityList.get(4).setLocation(64, 0);
+		/*2, 2,*/ entityList.get(5).setLocation(64, 64);
+
+		entities = entityList;
 
 		currentTime = System.currentTimeMillis();
 		lastTime = currentTime;
 		PlayerController playerController = new PlayerController(ethan);
-//		Timer.schedule(new Controller(ethan), 0, 0.02f);
-		Timer.schedule(new EntityController(this, entityList), 0f, 0.1f);
-	}
-
-	public void addToMap(int x, int y, GameObject object) {
-		object.setLocation(x, y);
-		map[y][x].objects.add(object);
+		Timer.schedule(playerController, 0, 0.02f);
+		Timer.schedule(new EntityController(this, entityList), 0f, 0.02f);
+		Timer.schedule(new ActionController(entityList), 0f, 0.1f);
 	}
 
 	@Override
-	public void render () {
+	public void render() {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		batch.begin();
-		Tile tile;
 		Sprite sprite;
-		for (int y = 0; y < map.length; y++) {
-			for (int x = 0; x < map[y].length; x++) {
-				tile = map[y][x];
-				for (GameObject object : tile.objects) {
-					if (object == null) {
-						continue;
-					}
-					Utils.debug("Rendering " + object.getName() + " at " + object.getX() + "/" + object.getY());
-					sprite = object.getCurrentSprite();
-					sprite.setX((x+1) * tileSize * windowSize);
-					sprite.setY((y+1) * tileSize * windowSize);
-					object.draw(batch);
-				}
+		for (Entity object : entities) {
+			if (object == null) {
+				continue;
 			}
+//			Utils.debug("Rendering " + object.getName() + " at " + object.getX() + "/" + object.getY());
+			sprite = object.getCurrentSprite();
+			sprite.setX(object.getX() * windowSize);
+			sprite.setY(object.getY() * windowSize);
+			object.draw(batch);
 		}
 		batch.end();
 		fps();

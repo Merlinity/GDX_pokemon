@@ -7,6 +7,8 @@ public abstract class GameObject {
     // the sprite to display
     protected Sprite currentSprite;
 
+    ObjectAction nextAction = ObjectAction.IDLE;
+
     // x and y location on the map
     protected int x, y;
 

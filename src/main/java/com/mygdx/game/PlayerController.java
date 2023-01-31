@@ -27,6 +27,9 @@ public class PlayerController extends Task {
         String action;
         try {
             action = determineAction();
+            if (controlled_entity.isWalking() && !"movePlayer".equals(action)) {
+                controlled_entity.stopWalk();
+            }
 
             switch (action) {
                 case "movePlayer":
@@ -52,11 +55,11 @@ public class PlayerController extends Task {
         }
 
         if (directionForMovement == controlled_entity.getFacing()) {
-            Utils.debug("Making " + controlled_entity.getName() + " move.");
+//            Utils.debug("Making " + controlled_entity.getName() + " move.");
             if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-                controlled_entity.run();
+                controlled_entity.queueRun();
             } else {
-                controlled_entity.walk();
+                controlled_entity.queueWalk();
             }
         } else {
             Utils.debug("Making " + controlled_entity.getName() + " face " + directionForMovement.name() + ".");
