@@ -2,11 +2,12 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.entities.Direction;
 import com.mygdx.game.entities.Entity;
 
-public class PlayerController extends Task {
+public class PlayerController implements InputProcessor {
     private static PlayerController playerController;
 
     private Entity controlled_entity;
@@ -22,49 +23,16 @@ public class PlayerController extends Task {
         return PlayerController.playerController;
     }
 
-    @Override
-    public void run() {
-        String action;
-        try {
-            action = determineAction();
-//            if (controlled_entity.isWalking() && !"movePlayer".equals(action)) {
-//                controlled_entity.stopWalk();
-//            }
-
-            switch (action) {
-                case "movePlayer":
-                    handleMovement();
-                    break;
-                case "moveCursor":
-                    Utils.debug("There are no menus to move cursor in.");
-                    break;
-                case "openMenu":
-                    Utils.debug("Menu not yet implemented.");
-                    break;
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void handleMovement() {
-        Direction directionForMovement = getFacing();
+    private void handleMovement(Direction directionForMovement) {
+//        Direction directionForMovement = getFacing();
 
         if (directionForMovement == null) {
             return;
         }
 
-        if (directionForMovement == controlled_entity.getFacing()) {
-//            Utils.debug("Making " + controlled_entity.getName() + " move.");
-            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-                controlled_entity.queueRun();
-            } else {
-                controlled_entity.queueWalk();
-            }
-        } else {
-            Utils.debug("Making " + controlled_entity.getName() + " face " + directionForMovement.name() + ".");
-            controlled_entity.setFacing(directionForMovement);
-        }
+        Utils.debug("Making " + controlled_entity.getName() + " face " + directionForMovement.name() + ".");
+        controlled_entity.setFacing(directionForMovement);
+        controlled_entity.queueWalk();
     }
 
     private String determineAction() {
@@ -105,5 +73,54 @@ public class PlayerController extends Task {
             return Direction.SOUTH;
         }
         return null;
+    }
+
+    @Override
+    public boolean keyDown(int keyCode) {
+        switch (keyCode) {
+           case Input.Keys.LEFT -> handleMovement(Direction.WEST);
+           case Input.Keys.RIGHT -> handleMovement(Direction.EAST);
+           case Input.Keys.UP -> handleMovement(Direction.NORTH);
+           case Input.Keys.DOWN -> handleMovement(Direction.SOUTH);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keyCode) {
+        switch (keyCode) {
+            case Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.UP, Input.Keys.DOWN -> controlled_entity.stopWalk();
+        }
+        return true;
+    }
+
+    @Override
+    public boolean keyTyped(char c) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int i, int i1, int i2, int i3) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int i, int i1, int i2, int i3) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int i, int i1, int i2) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int i, int i1) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float v, float v1) {
+        return false;
     }
 }

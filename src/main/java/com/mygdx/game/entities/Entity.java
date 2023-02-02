@@ -137,7 +137,7 @@ public abstract class Entity extends GameObject {
 			walk_cycle++;
 		}
 
-		stopWalk();
+//		stopWalk();
 	}
 
 	public void draw(SpriteBatch batch) {

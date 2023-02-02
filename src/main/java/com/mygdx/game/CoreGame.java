@@ -17,7 +17,7 @@ import com.mygdx.game.entities.pokemon.Pokemon;
 
 public class CoreGame extends ApplicationAdapter {
 	
-	public static float windowSize = 1.0f;
+	public static float windowSize = 2.0f;
 	public static int tileSize = 33;
 
 	private static CoreGame game;
@@ -74,14 +74,15 @@ public class CoreGame extends ApplicationAdapter {
 		currentTime = System.currentTimeMillis();
 		lastTime = currentTime;
 		PlayerController playerController = new PlayerController(ethan);
-		Timer.schedule(playerController, 0, 0.02f);
+//		Timer.schedule(playerController, 0, 0.02f);
+		Gdx.input.setInputProcessor(playerController);
 		Timer.schedule(new EntityController(this, entityList), 0f, 0.02f);
 		Timer.schedule(new ActionController(entityList), 0f, 0.1f);
 	}
 
 	@Override
 	public void render() {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(0.5f, 0.7f, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		batch.begin();
